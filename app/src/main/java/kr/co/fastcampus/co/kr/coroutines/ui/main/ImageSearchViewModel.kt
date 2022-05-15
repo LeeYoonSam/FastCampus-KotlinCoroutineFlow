@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import kr.co.fastcampus.co.kr.coroutines.data.NaverImageSearchRepository
 import kr.co.fastcampus.co.kr.coroutines.model.Item
 
-
 /**
  * 참고
  *
@@ -26,7 +25,8 @@ class ImageSearchViewModel : ViewModel() {
     private val queryFlow = MutableSharedFlow<String>()
     private val favorites = mutableSetOf<Item>()
     // 핫 스트림, 구독하지 않고 있어도 값을 계속 내보내고 있습니다.
-    private val _favoritesFlow = MutableSharedFlow<List<Item>>()
+    // replay - 새 구독자에게 재생되는 값의 수입니다(음수일 수 없으며 기본값은 0).
+    private val _favoritesFlow = MutableSharedFlow<List<Item>>(replay = 1)
 
     /**
      * 1. 사용자가 키워드를 입력하면 queryFlow 키워드가 흘러 들어옵니다
