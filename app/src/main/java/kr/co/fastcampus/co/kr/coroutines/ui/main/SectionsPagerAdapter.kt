@@ -16,9 +16,12 @@ class SectionsPagerAdapter(private val fragmentActivity: FragmentActivity) :
      * 이런식으로 변수를 만들어서 할당하게 되면 항상 만들어져 있기 때문에 곤란한 상황이 생깁니다.
      * 생성과 소멸은 페이저 어댑터에게 맡깁니다.
      */
-    override fun createFragment(position: Int): Fragment {
-        return ImageSearchFragment()
-    }
+    override fun createFragment(position: Int): Fragment =
+        if (position == 0) {
+            ImageSearchFragment()
+        } else {
+            FavoriteFragment()
+        }
 
     override fun getItemCount(): Int {
         return 2

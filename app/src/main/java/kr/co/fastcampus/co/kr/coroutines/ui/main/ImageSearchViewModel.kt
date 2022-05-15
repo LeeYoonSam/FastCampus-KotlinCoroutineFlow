@@ -25,6 +25,7 @@ class ImageSearchViewModel : ViewModel() {
     private val repository = NaverImageSearchRepository()
     private val queryFlow = MutableSharedFlow<String>()
     private val favorites = mutableSetOf<Item>()
+    // 핫 스트림, 구독하지 않고 있어도 값을 계속 내보내고 있습니다.
     private val _favoritesFlow = MutableSharedFlow<List<Item>>()
 
     /**
@@ -41,6 +42,7 @@ class ImageSearchViewModel : ViewModel() {
         // 처리 결과를 캐시를 통해서 뷰모델 스코프에 저장
         .cachedIn(viewModelScope)
 
+    // 값을 변경할수 없는 SharedFlow 로 변경
     val favoritesFlow = _favoritesFlow.asSharedFlow()
 
     private fun searchImages(query: String): Flow<PagingData<Item>> =
