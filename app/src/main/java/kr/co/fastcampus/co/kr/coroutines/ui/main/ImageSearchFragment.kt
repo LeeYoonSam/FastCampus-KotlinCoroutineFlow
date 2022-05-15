@@ -22,10 +22,6 @@ class ImageSearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         imageSearchViewModel = ViewModelProvider(this)[ImageSearchViewModel::class.java]
-
-        lifecycleScope.launch {
-            TODO("collectLatest를 이용해서 어댑터를 갱신해야합니다.")
-        }
     }
 
     override fun onCreateView(
@@ -35,6 +31,27 @@ class ImageSearchFragment : Fragment() {
 
         val binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
+
+        /**
+         * Fragment 에서는 viewLifecycleOwner 에서 lifecycleScope 를 가져와야 합니다.
+         *
+         * lifecycleScope VS viewLifecycleOwner.lifecycleScope
+         *
+         *  - lifecycleScope
+         *      - 프래그먼트의 라이프사이클에 의존 합니다
+         *      - 프래그먼트가 화면에 보이지 않을때도 lifecycleScope 가 남아있을수 있습니다.
+         *
+         *  - viewLifecycleOwner.lifecycleScope
+         *      - 뷰의 라이프사이클에 의존 합니다.
+         *      - 프래그먼트에서 보여지는것이 더이상 의미가 없을때 viewLifecycleOwner.lifecycleScope 이 취소가 될것으로 프래그먼트에서 사용하기에 더 적절합니다.
+         */
+        viewLifecycleOwner.lifecycleScope.launch {
+            imageSearchViewModel.pagingDataFlow
+                // 질의어, 새로 더 많은 데이터를 가져올 경우 조금씩 데이터가 변경되기 때문에 마지막 데이터만 사용하기 위해 collectLatest 를 사용
+                .collectLatest { items ->
+                    adapter.submitData(items)
+                }
+        }
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(context, 4)

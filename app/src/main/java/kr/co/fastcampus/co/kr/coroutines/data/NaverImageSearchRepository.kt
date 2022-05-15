@@ -39,6 +39,8 @@ class NaverImageSearchRepository {
     }
 
     fun getImageSearch(query: String): Flow<PagingData<Item>> {
+        // 페이저를 통해서 필요한 데이터를 자동으로 받아옵니다.
+        // 페이저가 DataSource 를 이용해서 스크롤시 필요한 데이터를 알아서 가져옵니다.
         return Pager(
             config = PagingConfig(
                 pageSize = NaverImageSearchDataSource.defaultDisplay,
@@ -47,6 +49,6 @@ class NaverImageSearchRepository {
             pagingSourceFactory = {
                 NaverImageSearchDataSource(query, service)
             }
-        ).flow
+        ).flow // flow 를 반환
     }
 }

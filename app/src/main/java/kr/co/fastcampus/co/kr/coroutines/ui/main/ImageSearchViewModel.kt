@@ -27,6 +27,12 @@ class ImageSearchViewModel : ViewModel() {
     private val favorites = mutableSetOf<Item>()
     private val _favoritesFlow = MutableSharedFlow<List<Item>>()
 
+    /**
+     * 1. 사용자가 키워드를 입력하면 queryFlow 키워드가 흘러 들어옵니다
+     * 2. flow 가 변경될때마다 이미지 검색결과를 가져오고 이전 결과를 날립니다
+     * 3. 결과가 PagingDataFlow 라는 하나의 Flow
+     * 4. 이 flow 로 어댑터를 업데이트를 해야 합니다
+     */
     val pagingDataFlow = queryFlow
         // 검색어가 변경되면 다시 검색을위해 flatMap 사용
         .flatMapLatest {

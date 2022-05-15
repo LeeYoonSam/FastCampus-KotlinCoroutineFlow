@@ -18,6 +18,7 @@ class ImageSearchViewHolder(
         item?.let { item ->
             Glide.with(binding.root)
                 .load(item.thumbnail)
+                .centerCrop()
                 .into(binding.imageView)
 
             binding.imageView.setOnClickListener {
