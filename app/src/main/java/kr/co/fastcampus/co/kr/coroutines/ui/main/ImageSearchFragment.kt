@@ -39,7 +39,8 @@ class ImageSearchFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(context, 4)
         binding.search.setOnClickListener {
-            TODO("검색 기능을 구현해야합니다.")
+            val query = binding.editText.text.trim().toString()
+            imageSearchViewModel.handleQuery(query)
         }
 
         return root
